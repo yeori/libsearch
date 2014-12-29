@@ -89,6 +89,26 @@ public class SearchResult {
 	public boolean isHoldable() {
 		return borrowingStatus == STATUS.BORROWED;
 	}
+	
+	public SearchResult(){
+		
+	}
+	public SearchResult(String thunmailUrl, String title, String author,
+			String publisherName, String detailUrl, STATUS borrowingStatus,
+			HOLDS holdingStatus, String dueDate, String locationName,
+			String publishingYear) {
+		super();
+		this.thunmailUrl = thunmailUrl;
+		this.title = title;
+		this.author = author;
+		this.publisherName = publisherName;
+		this.detailUrl = detailUrl;
+		this.borrowingStatus = borrowingStatus;
+		this.holdingStatus = holdingStatus;
+		this.dueDate = dueDate;
+		this.locationName = locationName;
+		this.publishingYear = publishingYear;
+	}
 	/* start : getter/setter */
 	public String getThunmailUrl() {
 		return thunmailUrl;

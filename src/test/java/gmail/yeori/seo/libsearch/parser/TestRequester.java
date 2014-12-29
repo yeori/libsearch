@@ -48,9 +48,12 @@ public class TestRequester {
 		String cssTitle = ".res_dl a";
 		String cssAuthor = ".author";
 		String cssDetailUrl = ".res_dl dt a";
+		String cssLoc = ".res_dl dd p#booklib${idx} span";
+		
 		Elements aLi = doc.select(cssBookNodes);
 		Iterator<Element> itr = aLi.iterator();
 		SearchResult item = new SearchResult();
+		int idx = 0;
 		while ( itr.hasNext()) {
 			Element li = itr.next();
 			System.out.println("image  : " + li.select(cssBookImage).attr("src"));
@@ -68,7 +71,23 @@ public class TestRequester {
 			String detailUrl = url.substring(0, url.lastIndexOf('/')) + normailize(li.select(cssDetailUrl).attr("href"));
 			System.out.println("detail : " + detailUrl);
 			item.setDetailUrl(detailUrl);
+
+			/*
+				소장처 : json 요청을 보내야 함.
 			
+				Closure
+				booklocation: "booklib0"
+				isbn: "8990109140"
+				reckey: "70156274"
+				volcode: ""
+
+				url    : '/search/json_relay.asp' 
+				params :'cmd=LIB_BOOK_STATUS&isbn='+ isbn +'&recKey='+ reckey +'&volCode='+ volcode +''
+			 */
+			tmp = cssLoc.replace("${idx}", String.valueOf(idx));
+			String location = li.select( tmp ).html();
+			System.out.println("location css : " + tmp);
+			System.out.println("location : " + location);
 //			if ( !itr.hasNext() ){
 //				System.out.println("====");
 //				String params = detailUrl.substring(detailUrl.indexOf('?')+1);
@@ -81,6 +100,7 @@ public class TestRequester {
 			/* 소장 정보*/
 			
 			System.out.println(item);
+			idx ++ ;
 		}
 	}
 	private String normailize ( String url ){

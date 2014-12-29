@@ -1,5 +1,14 @@
 package gmail.yeori.seo.libsearch.main;
 
+import java.util.List;
+
+import gmail.yeori.seo.libsearch.engine.SearchEngine;
+import gmail.yeori.seo.libsearch.engine.SearchListener;
+import gmail.yeori.seo.libsearch.model.SearchResult;
+import gmail.yeori.seo.libsearch.parser.EPLibParser;
+import gmail.yeori.seo.libsearch.ui.SearchRequestListener;
+import gmail.yeori.seo.libsearch.ui.ViewMain;
+
 public class RunMain {
 
 	/**
@@ -8,22 +17,27 @@ public class RunMain {
 	public static void main(String[] args) {
 		System.out.println("test run");
 		
-		LibraryEngine engine = new LibraryEngine(
-				"http://www.eplib.or.kr",
-				"/service/search.asp",
-				"POST");
+		final SearchEngine engine = new SearchEngine();
+		engine.addParser(new EPLibParser());
+		
+		final ViewMain view = new ViewMain();
+		
+		view.addSearchRequestListener ( new SearchRequestListener(){
+			@Override
+			public void searchRequested(String searchWord) {
+				engine.search(searchWord);
+			}
+		});
+		
+		engine.addSearchListener ( new SearchListener() {
+			@Override
+			public void searchResults(String keyword, List<SearchResult> results) {
+				view.update(keyword, results);
+			}
+		});
+		
 //		engine.setUrl("");
 
-	}
-	
-	public static class LibraryEngine {
-		private String host;
-		private String formUrl;
-		private String method;
-		public LibraryEngine(String host, String formUrl, String method) {
-			// TODO Auto-generated constructor stub
-		}
-		
 	}
 
 }
