@@ -19,7 +19,7 @@ import org.jsoup.select.Elements;
 import gmail.yeori.seo.libsearch.model.SearchResult;
 
 /**
- * 소장처를 알아내기 위해서 xhr 요청을 한번 더 보내야 함.
+ * 도서 소장처를 알아내기 위해서 xhr 요청을 한번 더 보내야 함.
  * 그런데 isbn 정보가 없는 책의 경우 첫번째 요청의 응답 페이지 안에 
  * 소장처가 명시되어있기 때문에 xhr요청을 보낼 필요가 없음.
  * 
