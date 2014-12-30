@@ -12,19 +12,21 @@ public class SearchResult {
 	 * STATUS.BORROWED    : 대출되었음
 	 * STATUS.AVAILABLE   : 도서관에 있음
 	 * STATUS.NOT_ALLOWED : 이용 불가능, 또는 대출 안되는 매체
+	 * STATUS.UNKNOWN     : 확인불가
 	 * @author chminseo
 	 *
 	 */
-	public enum STATUS {BORROWED, AVAILABLE, NOT_ALLOWED };
+	public enum STATUS {BORROWED, AVAILABLE, NOT_ALLOWED, UNKNOWN };
 	
 	/**
 	 * 예약 상태
-	 * HOLDS.YES : 예약자 있음
-	 * HOLDS.NO : 예약자 없음
+	 * HOLDS.YES     : 예약자 있음
+	 * HOLDS.NO      : 예약자 없음
+	 * HOLDS.UNKNOWN : 확인불가
 	 * @author chminseo
 	 *
 	 */
-	public enum HOLDS { YES, NO};
+	public enum HOLDS { YES, NO, UNKNOWN};
 	
 	/**
 	 * 책 이미지 URL
@@ -49,11 +51,11 @@ public class SearchResult {
 	/**
 	 * 책의 대출 상태
 	 */
-	private STATUS borrowingStatus;
+	private STATUS borrowingStatus = STATUS.UNKNOWN;
 	/**
 	 * 책의 예약 상태
 	 */
-	private HOLDS holdingStatus ;
+	private HOLDS holdingStatus = HOLDS.UNKNOWN;
 	/**
 	 * 반납일(대출된 상태일 경우에만 값이 존재)
 	 */
@@ -72,7 +74,7 @@ public class SearchResult {
 	 */
 	public boolean isBorrowable(){
 		// 이미 대출 중이면 불가능
-		if ( borrowingStatus == STATUS.BORROWED ){
+		if ( borrowingStatus == STATUS.BORROWED || borrowingStatus == STATUS.UNKNOWN){
 			return false;
 		}
 		// 대출 중이 아니더라도 예약자가 있으면 불가능
