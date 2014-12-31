@@ -1,4 +1,4 @@
-package gmail.yeori.seo.libsearch.engine;
+package gmail.yeori.seo.libsearch;
 
 import gmail.yeori.seo.libsearch.model.SearchResult;
 
