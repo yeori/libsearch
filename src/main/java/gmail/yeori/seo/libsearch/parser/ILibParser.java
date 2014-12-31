@@ -9,5 +9,7 @@ import gmail.yeori.seo.libsearch.model.SearchResult;
  *
  */
 public interface ILibParser {
+	public String getPaserId();
+	public String getLibUrl();
 	public <T extends SearchResult>   List<T> parse(String keyword) throws LibParserException;
 }

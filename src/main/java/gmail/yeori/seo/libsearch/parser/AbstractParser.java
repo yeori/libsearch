@@ -7,6 +7,28 @@ import java.util.List;
 
 public abstract class AbstractParser implements ILibParser {
 
+	private String id;
+	private String libraryUrl;
+	
+	protected AbstractParser( String id, String libUrl) {
+		this.id = id;
+		this.libraryUrl = libUrl;
+	}
+	
+	
+	@Override
+	public String getLibUrl() {
+		return libraryUrl;
+	}
+
+
+	@Override
+	public String getPaserId() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
 	@Override
 	public <T extends SearchResult> List<T> parse(String keyword)
 			throws LibParserException {

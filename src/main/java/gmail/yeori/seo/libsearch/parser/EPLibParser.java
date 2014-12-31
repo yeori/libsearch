@@ -36,22 +36,9 @@ public class EPLibParser extends AbstractParser {
 			"&recKey=${reckey}" +
 			"&volCode=${volcode}";
 	
-	public Document loadDocument(String keyword) throws LibParserException {
-		Connection conn = Jsoup.connect("http://" + url);
-		conn.data("lib", "MA");
-		conn.data("main", "Y");
-		conn.data("kind", "");
-		conn.data("txt", keyword);
-		conn.data("x", "0");
-		conn.data("y", "0");
-		
-		conn.method(Method.POST);
-		
-		try {
-			return conn.get();
-		} catch (IOException e) {
-			throw new LibParserException("[EPLibParser error] fail to connect", e);
-		}
+	
+	public EPLibParser() {
+		super("eplib.or.kr", "http://www.eplib.or.kr");
 	}
 
 	@Override
