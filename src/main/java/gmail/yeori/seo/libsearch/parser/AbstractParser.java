@@ -24,8 +24,7 @@ public abstract class AbstractParser implements ILibParser {
 
 	@Override
 	public String getPaserId() {
-		// TODO Auto-generated method stub
-		return null;
+		return id;
 	}
 
 
