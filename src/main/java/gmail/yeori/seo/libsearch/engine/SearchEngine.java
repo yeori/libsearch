@@ -1,5 +1,6 @@
 package gmail.yeori.seo.libsearch.engine;
 
+import gmail.yeori.seo.libsearch.SearchListener;
 import gmail.yeori.seo.libsearch.model.SearchResult;
 import gmail.yeori.seo.libsearch.parser.ILibParser;
 import gmail.yeori.seo.libsearch.parser.LibParserException;

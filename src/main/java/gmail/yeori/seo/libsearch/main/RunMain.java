@@ -3,11 +3,11 @@ package gmail.yeori.seo.libsearch.main;
 import java.util.List;
 
 import gmail.yeori.seo.libsearch.engine.SearchEngine;
-import gmail.yeori.seo.libsearch.engine.SearchListener;
 import gmail.yeori.seo.libsearch.model.SearchResult;
 import gmail.yeori.seo.libsearch.parser.EPLibParser;
 import gmail.yeori.seo.libsearch.ui.SearchRequestListener;
 import gmail.yeori.seo.libsearch.ui.ViewMain;
+import gmail.yeori.seo.libsearch.SearchListener;
 
 public class RunMain {
 
