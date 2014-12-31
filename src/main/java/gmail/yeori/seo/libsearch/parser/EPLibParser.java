@@ -26,14 +26,17 @@ import gmail.yeori.seo.libsearch.model.SearchResult;
  * @author chminseo
  *
  */
-public class EPLibParser implements ILibParser {
+public class EPLibParser extends AbstractParser {
 	
 	private String host = "www.eplib.or.kr";
 	private String url = host + "/service/search.asp";
-	private String locUrlTemplate = "/search/json_relay.asp?cmd=LIB_BOOK_STATUS&isbn=${isbn}&recKey=${reckey}&volCode=${volcode}";
+	private String locUrlTemplate = "/search/json_relay.asp" +
+			"?cmd=LIB_BOOK_STATUS" +
+			"&isbn=${isbn}" +
+			"&recKey=${reckey}" +
+			"&volCode=${volcode}";
 	
-	@Override
-	public List<SearchResult> parse(String keyword) throws LibParserException {
+	public Document loadDocument(String keyword) throws LibParserException {
 		Connection conn = Jsoup.connect("http://" + url);
 		conn.data("lib", "MA");
 		conn.data("main", "Y");
@@ -43,9 +46,33 @@ public class EPLibParser implements ILibParser {
 		conn.data("y", "0");
 		
 		conn.method(Method.POST);
+		
+		try {
+			return conn.get();
+		} catch (IOException e) {
+			throw new LibParserException("[EPLibParser error] fail to connect", e);
+		}
+	}
+
+	@Override
+	protected String loadHtml(String keyword) throws IOException {
+		Connection conn = Jsoup.connect("http://" + url);
+		conn.data("lib", "MA");
+		conn.data("main", "Y");
+		conn.data("kind", "");
+		conn.data("txt", keyword);
+		conn.data("x", "0");
+		conn.data("y", "0");
+		
+		conn.method(Method.POST);
+		return conn.get().html();
+	}
+
+	@Override
+	protected List<SearchResult> parseInternal(String html) throws LibParserException {
 
 		try {
-			Document doc = conn.get();
+			Document doc = Jsoup.parse(html);
 			
 			String cssBookNodes = ".result_list li";
 			String cssBookImage = ".res_img img";
@@ -81,7 +108,7 @@ public class EPLibParser implements ILibParser {
 				//
 				
 				String getLibScript = li.select(jsGetLib).outerHtml();
-				System.out.println(getLibScript);
+//				System.out.println(getLibScript);
 				String location = "";
 				if ( "".equals(getLibScript) ) {
 					// isbn이 없는 책은 xhr요청을 보내는 script가 없음.
@@ -124,14 +151,14 @@ public class EPLibParser implements ILibParser {
 			url = url.replace("${volcode}", params[4].trim());
 			return url;
 		} catch (Exception e) {
-			System.out.println("[ERROR] " + getLibScript);
+//			System.out.println("[ERROR] " + getLibScript);
 			throw e;
 		}
 	}
 	
 	private String loadLocation(String host, String locUrl) throws IOException, ParseException {
 		String json = Jsoup.connect("http://" + host + locUrl).ignoreContentType(true).execute().body();
-		System.out.println( "=>" + host + locUrl);
+//		System.out.println( "=>" + host + locUrl);
 		JSONParser parser = new JSONParser();
 		JSONObject obj = (JSONObject) parser.parse(json);
 		JSONArray status = (JSONArray) obj.get("kind_data");
