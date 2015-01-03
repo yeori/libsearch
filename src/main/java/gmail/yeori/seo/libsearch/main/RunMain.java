@@ -5,9 +5,9 @@ import java.util.List;
 import gmail.yeori.seo.libsearch.engine.SearchEngine;
 import gmail.yeori.seo.libsearch.model.SearchResult;
 import gmail.yeori.seo.libsearch.parser.EPLibParser;
-import gmail.yeori.seo.libsearch.ui.SearchRequestListener;
 import gmail.yeori.seo.libsearch.ui.ViewMain;
 import gmail.yeori.seo.libsearch.SearchListener;
+import gmail.yeori.seo.libsearch.SearchRequestListener;
 
 public class RunMain {
 

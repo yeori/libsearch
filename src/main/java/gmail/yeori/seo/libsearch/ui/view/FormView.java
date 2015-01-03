@@ -1,6 +1,6 @@
 package gmail.yeori.seo.libsearch.ui.view;
 
-import gmail.yeori.seo.libsearch.ui.SearchRequestListener;
+import gmail.yeori.seo.libsearch.SearchRequestListener;
 
 import java.awt.BorderLayout;
 import java.awt.event.KeyAdapter;
