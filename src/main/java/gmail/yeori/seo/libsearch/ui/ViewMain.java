@@ -1,8 +1,9 @@
 package gmail.yeori.seo.libsearch.ui;
 
+import gmail.yeori.seo.libsearch.SearchRequestListener;
+import gmail.yeori.seo.libsearch.model.HOLDS;
+import gmail.yeori.seo.libsearch.model.STATUS;
 import gmail.yeori.seo.libsearch.model.SearchResult;
-import gmail.yeori.seo.libsearch.model.SearchResult.HOLDS;
-import gmail.yeori.seo.libsearch.model.SearchResult.STATUS;
 import gmail.yeori.seo.libsearch.ui.view.FormView;
 
 import java.util.ArrayList;

@@ -8,27 +8,6 @@ package gmail.yeori.seo.libsearch.model;
  */
 public class SearchResult {
 	/**
-	 * 대출 가능 상태
-	 * STATUS.BORROWED    : 대출되었음
-	 * STATUS.AVAILABLE   : 도서관에 있음
-	 * STATUS.NOT_ALLOWED : 이용 불가능, 또는 대출 안되는 매체
-	 * STATUS.UNKNOWN     : 확인불가
-	 * @author chminseo
-	 *
-	 */
-	public enum STATUS {BORROWED, AVAILABLE, NOT_ALLOWED, UNKNOWN };
-	
-	/**
-	 * 예약 상태
-	 * HOLDS.YES     : 예약자 있음
-	 * HOLDS.NO      : 예약자 없음
-	 * HOLDS.UNKNOWN : 확인불가
-	 * @author chminseo
-	 *
-	 */
-	public enum HOLDS { YES, NO, UNKNOWN};
-	
-	/**
 	 * 책 이미지 URL
 	 */
 	private String thunmailUrl;
