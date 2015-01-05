@@ -9,15 +9,15 @@ import gmail.yeori.seo.libsearch.ui.view.FormView;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.UIManager;
-
 public class ViewMain {
 	/**
 	 * @param args
 	 */
 	static LibSwingFrame window = null;
+
+	private IPageRequestAction pageAction;
 	public static void main(String[] args) {
-		try {
+		/*try {
 			window = new LibSwingFrame("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
 		} catch (Exception e) {
 			System.out.println("Look and Feel error");
@@ -28,16 +28,18 @@ public class ViewMain {
 			Thread.sleep(2000);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
-		}
-		window.showSearchResults("자바", loadTestResult());
+		}*/
+//		window.showSearchResults("자바", loadTestResult());
 	}
+
 	
-	public ViewMain ()  {
+	public ViewMain (IPageRequestAction action)  {
+		this.pageAction = action;
 		showView();
 	}
 	public void showView() {
 		try {
-			window = new LibSwingFrame("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+			window = new LibSwingFrame("com.sun.java.swing.plaf.windows.WindowsLookAndFeel", pageAction);
 		} catch (Exception e) {
 			System.out.println("Look and Feel error");
 			e.printStackTrace();
@@ -71,9 +73,14 @@ public class ViewMain {
 		view.addSearchRequestListener( listener );
 	}
 
-	public void update(String keyword, List<SearchResult> results) {
+	public void update(String keyword, List<SearchResult> results, int pageIndex, int pageSize) {
 		// TODO Auto-generated method stub
-		window.showSearchResults(keyword, results);
+		window.showSearchResults(keyword, results, pageIndex, pageSize);
 	}
+
+	public void setPageAction(IPageRequestAction action) {
+		this.pageAction = action;
+	}
+
 
 }

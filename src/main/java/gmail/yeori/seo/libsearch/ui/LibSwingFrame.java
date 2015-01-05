@@ -45,9 +45,11 @@ public class LibSwingFrame extends JFrame {
 	private FormView formView;
 	private TreeView treeView;
 	private TabView tabView;
+	
 	/**
 	 * Launch the application.
 	 */
+	/*
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -59,13 +61,14 @@ public class LibSwingFrame extends JFrame {
 				}
 			}
 		});
-	}
+	}*/
 
 	/**
 	 * Create the frame.
 	 */
-	public LibSwingFrame(String lnfName) throws Exception {
+	public LibSwingFrame(String lnfName, IPageRequestAction actionHandler) throws Exception {
 		ViewConfig config = new ViewConfig();
+		config.setPageActionHandler ( actionHandler);
 		formView = new FormView(config); // 검색창
 		treeView = new TreeView(config); // 왼쪽창
 		tabView = new TabView(config); // 오른쪽 탭패널
@@ -105,16 +108,13 @@ public class LibSwingFrame extends JFrame {
 		System.out.println("frame init and shown");
 	}
 
-	public void showSearchResults(String searchWord, List<SearchResult> results) {
+	public void showSearchResults(String searchWord, List<SearchResult> results, int pageIndex, int pageSize) {
 		treeView.addKeyword(searchWord);
-		tabView.updateTable(searchWord, results);
+		tabView.updateTable(searchWord, results, pageIndex, pageSize);
 	}
 
 	public FormView getFormView() {
 		return formView;
 		
 	}
-	
-
-
 }
