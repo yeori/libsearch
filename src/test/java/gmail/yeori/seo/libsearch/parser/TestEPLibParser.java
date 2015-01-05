@@ -8,11 +8,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
 
+import gmail.yeori.seo.libsearch.engine.Session;
+import gmail.yeori.seo.libsearch.engine.Session.PageContext;
 import gmail.yeori.seo.libsearch.model.SearchResult;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mockito;
 
 public class TestEPLibParser {
 
@@ -23,19 +24,22 @@ public class TestEPLibParser {
 	}
 
 	@Test
-	public void testParse() throws LibParserException, IOException {
+	public void test_parseInternal() throws LibParserException, IOException {
 		EPLibParser parser = new EPLibParser();
-		
-		List<SearchResult> results = parser.parseInternal(loadSample("자바"));
+		int pageIndex = 0;
+		Session session = new Session("자바", pageIndex);
+		List<SearchResult> results = parser.parseInternal(loadSample("자바", pageIndex), session);
 		assertEquals( 20, results.size());
-		for (Iterator iterator = results.iterator(); iterator.hasNext();) {
-			SearchResult searchResult = (SearchResult) iterator.next();
-//			System.out.println(searchResult);
-		}
+		
+		PageContext pgn = session.getPageContext(parser);
+		assertEquals (20, pgn.getLpp());
+		assertEquals (137, pgn.getTotal());
+		assertEquals ( 7, pgn.getPageSize());
+
 	}
 	
-	private String loadSample(String keyword) {
-		String file = host.replace('.', '_') + "/" + keyword + ".html";
+	private String loadSample(String keyword, int pageIndex ) {
+		String file = host.replace('.', '_') + "/" + keyword + "/" + (pageIndex+1) + ".html";
 		InputStream in = this.getClass().getClassLoader().getResourceAsStream("searchdata/" + file);
 		Scanner scanner = new Scanner(in, "utf-8");
 		StringBuilder sb = new StringBuilder();
