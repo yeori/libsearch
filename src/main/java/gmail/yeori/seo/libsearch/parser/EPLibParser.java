@@ -16,6 +16,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import gmail.yeori.seo.libsearch.engine.Session;
 import gmail.yeori.seo.libsearch.model.SearchResult;
 
 /**
@@ -42,25 +43,26 @@ public class EPLibParser extends AbstractParser {
 	}
 
 	@Override
-	protected String loadHtml(String keyword) throws IOException {
+	protected String loadHtml(String keyword, int pageIndex) throws IOException {
 		Connection conn = Jsoup.connect("http://" + url);
 		conn.data("lib", "MA");
 		conn.data("main", "Y");
-		conn.data("kind", "");
+		conn.data("kind", "2");
 		conn.data("txt", keyword);
-		conn.data("x", "0");
-		conn.data("y", "0");
+		conn.data("x", "32");
+		conn.data("y", "24");
+		conn.data("pPage", "" + (pageIndex+1));
 		
 		conn.method(Method.POST);
 		return conn.get().html();
 	}
 
 	@Override
-	protected List<SearchResult> parseInternal(String html) throws LibParserException {
+	protected List<SearchResult> parseInternal(String html, Session session) throws LibParserException {
 
 		try {
 			Document doc = Jsoup.parse(html);
-			
+			String cssTotal = ".result_box h4 strong";
 			String cssBookNodes = ".result_list li";
 			String cssBookImage = ".res_img img";
 			String cssTitle = ".res_dl a";
@@ -74,6 +76,10 @@ public class EPLibParser extends AbstractParser {
 			int p0, p1, p2;
 			Iterator<Element> itr = aLi.iterator();
 			int index = 0;
+			
+			String total = doc.select(cssTotal).get(2).text();
+			total = total.substring(1, total.length()-2); // format : "288권"
+			
 			while ( itr.hasNext()) {
 				Element li = itr.next();
 
@@ -112,6 +118,8 @@ public class EPLibParser extends AbstractParser {
 				index ++ ;
 			}
 			
+			session.setPageContext(Integer.parseInt(total), index, this);
+			
 			return results;
 		} catch (IOException e) {
 			throw  new LibParserException("IOException occured", e);
@@ -120,8 +128,14 @@ public class EPLibParser extends AbstractParser {
 		}
 	}
 	
+	
+	
 	/**
+	 * <pre>
+	 * 아래와 같은 형식으로 json 요청을 보내기 때문에 이를 http 요청으로 조립해주어야 함.
+	 *  
 	 * getLib("booklib0","49557","8956741093","1797116","");
+	 * </pre>
 	 * @param locUrl
 	 * @param getLibScript
 	 * @return
@@ -161,5 +175,7 @@ public class EPLibParser extends AbstractParser {
 			return "/" + url;
 		}
 	}
+
+
 
 }
