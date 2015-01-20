@@ -18,6 +18,7 @@ public class FormView implements IView<JPanel> {
 	private JTextField field;
 	public FormView ( ViewConfig config) {
 		this.config = config;
+		config.registerView ("formview", this);
 		listeners = new ArrayList<>();
 	}
 	@Override
@@ -52,8 +53,10 @@ public class FormView implements IView<JPanel> {
 		synchronized (listeners) {
 			cloned = new ArrayList<>(listeners);
 		}
+		TabView view = (TabView) config.getView("tabView");
+		view.clearTab(keyword);
 		for( SearchRequestListener srl : cloned ) {
-			srl.searchRequested(keyword);
+			srl.searchRequested(keyword, config.getFilters());
 		}
 		
 	}

@@ -46,6 +46,7 @@ public class TabView implements IView<JPanel> {
 	public TabView ( ViewConfig config) {
 		this.config = config;
 		this.action = config.getPageActionHandler();
+		config.registerView("tabView", this);
 	}
 	
 	@Override
@@ -118,6 +119,13 @@ public class TabView implements IView<JPanel> {
 		
 	}
 	
+	public void clearTab( String keyword) {
+		LibSearchTableModel<SearchResult> model = findTableModel(keyword);
+		if ( model != null ) {			
+			model.clear();
+		}
+	}
+	
 	private JPanel createTablePanel(TableModel model, String keyword, int pageIndex, int pageSize){
 		TableColumnModel columnModel = initColumnModel();
 		JScrollPane scroll = new JScrollPane(new JTable(model, columnModel));
@@ -137,26 +145,30 @@ public class TabView implements IView<JPanel> {
 		columnModel.addColumn(tc);
 		
 		tc = new TableColumn(1);
+		tc.setHeaderValue("출판년도");
+		columnModel.addColumn(tc);
+		
+		tc = new TableColumn(2);
 		tc.setHeaderValue("지은이");
 		columnModel.addColumn(tc);
 
-		tc = new TableColumn(2);
+		tc = new TableColumn(3);
 		tc.setHeaderValue("출판사");
 		columnModel.addColumn(tc);
 		
-		tc = new TableColumn(3);
+		tc = new TableColumn(4);
 		tc.setHeaderValue("대출가능");
 		columnModel.addColumn(tc);
 		
-		tc = new TableColumn(4);
+		tc = new TableColumn(5);
 		tc.setHeaderValue("예약여부");
 		columnModel.addColumn(tc);
 		
-		tc = new TableColumn(5);
+		tc = new TableColumn(6);
 		tc.setHeaderValue("반납일");
 		columnModel.addColumn(tc);
 		
-		tc = new TableColumn(6);
+		tc = new TableColumn(7);
 		tc.setHeaderValue("소장처");
 		columnModel.addColumn(tc);
 		return columnModel;
@@ -199,29 +211,32 @@ public class TabView implements IView<JPanel> {
 
 		@Override
 		public Object getValueAt(int rowIndex, int columnIndex) {
-			//0책제목, 1지은이, 2출판사, 3대출가능, 4예약여부, 5반납일, 6소장처
+			//0책제목, 1출판년도, 2지은이, 3출판사, 4대출가능, 5예약여부, 6반납일, 7소장처
 			SearchResult result = searchList.get(rowIndex);
 			String value = null;
 			switch (columnIndex) {
 			case 0:
 				value = result.getTitle();
 				break;
-			case 1:
-				value = result.getAuthor();
+			case 1 :
+				value = result.getPublishingYear() ;
 				break;
 			case 2:
-				value = result.getPublisherName();
+				value = result.getAuthor();
 				break;
 			case 3:
-				value = result.isBorrowable() ? "대출가능" : "대출중";
+				value = result.getPublisherName();
 				break;
 			case 4:
-				value = result.isHoldable() ? "" : "예약가능";
+				value = result.isBorrowable() ? "대출가능" : "대출중";
 				break;
 			case 5:
-				value = result.isBorrowable() ? "" : result.getDueDate();
+				value = result.isHoldable() ? "" : "예약가능";
 				break;
 			case 6:
+				value = result.isBorrowable() ? "" : result.getDueDate();
+				break;
+			case 7:
 				value = result.getLocationName();
 				break;
 			default:
@@ -242,7 +257,9 @@ public class TabView implements IView<JPanel> {
 		private String keyword ;
 		private IPageRequestAction action ;
 		private TabView tabView;
+		private ViewConfig config;
 		public PagePanel(TabView view, IPageRequestAction buttonAction, String keyword, int pageIndex, int pageSize) {
+			this.config = view.config;
 			this.tabView = view;
 			this.action = buttonAction;
 			this.keyword = keyword;
@@ -274,7 +291,7 @@ public class TabView implements IView<JPanel> {
 			int pageIndex = Integer.parseInt(btn.getText().trim()) -1;
 			disableButtonAt(pageIndex);
 			tabView.findTableModel(keyword).clear();
-			action.pageRequested(keyword, pageIndex);
+			action.pageRequested(keyword, pageIndex, config.getFilters());
 			
 		}
 		
