@@ -43,10 +43,4 @@ public class TestSearchEngine {
 		verify(listener_one, Mockito.times(1)).searchResults(any(LibSearchEvent.class));
 		verify(listener_two, Mockito.times(1)).searchResults(any(LibSearchEvent.class));
 	}
-
-	private List<SearchResult> loadHtml(String keyword, int i) {
-		
-		return null;
-	}
-
 }
