@@ -10,6 +10,7 @@ import gmail.yeori.seo.libsearch.parser.LibParserException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 
 public class SearchEngine {
 	private List<SearchListener> listeners ;
@@ -32,16 +33,29 @@ public class SearchEngine {
 	}
 	
 	public void search ( String keyword , int pageIndex) {
+		search ( keyword, pageIndex, new IFilter() {			
+			@Override
+			public boolean accept(SearchResult sr) {
+				return true;
+			}
+		});
+	}
+	
+	public void search ( String keyword, IFilter filter) {
+		search ( keyword, 0, filter);
+	}
+	
+	public void search( String keyword, int pageIndex, IFilter filter) {
 		Session s = sessionManager.findSession(keyword);
 		if ( s == null) {
 			s = new Session(keyword, pageIndex);
 			sessionManager.saveSession(keyword, s);
 		}
 		s.setPageIndex(pageIndex);
-		searchWithSession(s);
+		searchWithSession(s, filter);
 	}
 	
-	private void searchWithSession ( Session session) {
+	private void searchWithSession ( Session session, IFilter filter) {
 		String keyword = session.getKeyword();
 		
 		Iterator<ILibParser> itr = parsers.iterator();
@@ -64,6 +78,7 @@ public class SearchEngine {
 			try {
 				parser = itr.next();
 				List<SearchResult> results = parser.parse(session);
+				filterInternal ( results, filter);
 				notifySearchResult(keyword, 
 						results, 
 						session, 
@@ -74,6 +89,16 @@ public class SearchEngine {
 		}
 	}
 	
+	private void filterInternal(List<SearchResult> results, IFilter filter) {
+		ListIterator<SearchResult> itr = results.listIterator();
+		while ( itr.hasNext()) {
+			SearchResult sr = itr.next();
+			if ( ! filter.accept(sr)) {
+				itr.remove();
+			}
+		}
+	}
+
 	private void notifySearchResult(String keyword, 
 			List<SearchResult> results, 
 			Session session, 
@@ -91,5 +116,12 @@ public class SearchEngine {
 	public void addSearchListener(SearchListener listener) {
 		listeners.add(listener);
 		
+	}
+
+	/**
+	 * 등록된 모든 리스너 제거
+	 */
+	public void removeAllListener() {
+		this.listeners.clear();
 	}
 }
