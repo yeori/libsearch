@@ -6,8 +6,15 @@ import gmail.yeori.seo.libsearch.model.STATUS;
 import gmail.yeori.seo.libsearch.model.SearchResult;
 import gmail.yeori.seo.libsearch.ui.view.FormView;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.swing.JComponent;
+import javax.swing.KeyStroke;
 
 public class ViewMain {
 	/**
@@ -36,6 +43,22 @@ public class ViewMain {
 	public ViewMain (IPageRequestAction action)  {
 		this.pageAction = action;
 		showView();
+		bindKeys();
+	}
+	private void bindKeys() {
+		window.getRootPane().registerKeyboardAction(
+				new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						showFileDialog();
+					}
+				}, 
+				KeyStroke.getKeyStroke(KeyEvent.VK_F, InputEvent.CTRL_DOWN_MASK), 
+				JComponent.WHEN_IN_FOCUSED_WINDOW);
+	}
+
+	private void showFileDialog() {
+		window.openFilterDialog();
 	}
 	public void showView() {
 		try {
