@@ -45,6 +45,8 @@ public class LibSwingFrame extends JFrame {
 	private FormView formView;
 	private TreeView treeView;
 	private TabView tabView;
+
+	private ViewConfig config;
 	
 	/**
 	 * Launch the application.
@@ -67,7 +69,7 @@ public class LibSwingFrame extends JFrame {
 	 * Create the frame.
 	 */
 	public LibSwingFrame(String lnfName, IPageRequestAction actionHandler) throws Exception {
-		ViewConfig config = new ViewConfig();
+		config = new ViewConfig();
 		config.setPageActionHandler ( actionHandler);
 		formView = new FormView(config); // 검색창
 		treeView = new TreeView(config); // 왼쪽창
@@ -116,5 +118,13 @@ public class LibSwingFrame extends JFrame {
 	public FormView getFormView() {
 		return formView;
 		
+	}
+
+	public void openFilterDialog() {
+		// TODO Auto-generated method stub
+		FilterDialog dialog = new FilterDialog(this, config);
+		dialog.setSize(350, 250);
+		dialog.setLocationRelativeTo(this);
+		dialog.setVisible(true);
 	}
 }
